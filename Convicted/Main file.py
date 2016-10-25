@@ -47,6 +47,10 @@ while True:
         charXpos +=1
     if pressed[K_a]:
         charXpos -= 1
+    if pressed[K_SPACE]:
+        charYPos -= 10
+    if charYPos <= 0:
+        charYPos += 10
 
     for event in pygame.event.get():
         if event.type == QUIT:
