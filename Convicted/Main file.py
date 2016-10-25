@@ -39,20 +39,25 @@ while True:
     #Checks if the players position is less than the position of the floor. If it is then it brings the player back up one space.
     if charYPos >= 865:
         charYDirection = 0
+        jumped = False
 
 
 
     #Checks if the player is pressing the right or d arrow keys. If they are the character moves to the right.
     if pressed[K_RIGHT] or pressed[K_d]:
-        if charXDirection <6:
+        if charXDirection <4.5:
             charXDirection += 0.1
     elif pressed[K_LEFT] or pressed[K_a]:
-        if charXDirection >-6:
+        if charXDirection >-4.5:
             charXDirection -=0.1
     elif pressed[K_DOWN] or pressed[K_s]:
         charXDirection
     else:
         charXDirection = 0
+
+    if pressed[K_SPACE] and jumped == False:
+        charYDirection = -4
+        jumped = True
 
     #Position checkers to see if the player is at the boundry of the screen.
     if charYPos <= 0:
