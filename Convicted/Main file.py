@@ -27,7 +27,7 @@ BLUE = (0,0,255)
 
 window = pygame.display.set_mode((Width, Height),0, 32)
 font = pygame.font.SysFont(None,48)
-text = font.render("    ",True, WHITE,BLUE)
+text = font.render("  ",True, WHITE,BLUE)
 text2 = font.render("                                                                                                                                                                                                                                                                    ",True,WHITE,RED)
 floor = text2.get_rect()
 character = text.get_rect()
@@ -35,22 +35,24 @@ character = text.get_rect()
 while True:
     #Checks if the player is pressing any key. Listener.
     pressed = pygame.key.get_pressed()
-    charYDirection = 1
+    charYDirection += 0.1
     #Checks if the players position is less than the position of the floor. If it is then it brings the player back up one space.
     if charYPos >= 865:
         charYDirection = 0
 
 
+
     #Checks if the player is pressing the right or d arrow keys. If they are the character moves to the right.
     if pressed[K_RIGHT] or pressed[K_d]:
-        if charXDirection <3:
-            charXDirection += 0.05
+        if charXDirection <6:
+            charXDirection += 0.1
     elif pressed[K_LEFT] or pressed[K_a]:
-        if charXDirection >-3:
-            charXDirection -=0.05
+        if charXDirection >-6:
+            charXDirection -=0.1
+    elif pressed[K_DOWN] or pressed[K_s]:
+        charXDirection
     else:
         charXDirection = 0
-
 
     #Position checkers to see if the player is at the boundry of the screen.
     if charYPos <= 0:
@@ -84,7 +86,7 @@ while True:
     window.fill(WHITE)
     window.blit(text2,floor)
     window.blit(text,character)
-    #clock = pygame.time.Clock()
-    #clock.tick(180)
+    clock = pygame.time.Clock()
+    clock.tick(180)
     pygame.display.flip()
     pygame.display.update()
