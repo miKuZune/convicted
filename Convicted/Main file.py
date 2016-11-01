@@ -11,8 +11,8 @@ Height = 900
 charXDirection = 0
 charYDirection = 1
 #Sets the starting position for the character.
-charXpos = 400
-charYPos = 400
+charXpos = 50
+charYPos = 750
 #Sets the starting position for the floor.
 floorXPos = 100
 floorYPos = 900
@@ -31,18 +31,20 @@ text = font.render("  ",True, WHITE,BLUE)
 text2 = font.render("                                                                                                                                                                                                                                                                    ",True,WHITE,RED)
 floor = text2.get_rect()
 character = text.get_rect()
+onFloor = False
 
 while True:
     #Checks if the player is pressing any key. Listener.
     pressed = pygame.key.get_pressed()
     charYDirection += 0.1
+
+
     #Checks if the players position is less than the position of the floor. If it is then it brings the player back up one space.
-    if charYPos >= 865:
+    onFloor = character.colliderect(floor)
+
+    if onFloor == True:
         charYDirection = 0
         jumped = False
-
-
-
     #Checks if the player is pressing the right or d arrow keys. If they are the character moves to the right.
     if pressed[K_RIGHT] or pressed[K_d]:
         if charXDirection <4.5:
@@ -92,6 +94,6 @@ while True:
     window.blit(text2,floor)
     window.blit(text,character)
     clock = pygame.time.Clock()
-    clock.tick(180)
+    clock.tick(500)
     pygame.display.flip()
     pygame.display.update()
