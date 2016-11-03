@@ -1,6 +1,5 @@
 import pygame, sys
 from pygame import *
-
 pygame.init()
 
 #Height and width of the screen
@@ -12,26 +11,31 @@ charXDirection = 0
 charYDirection = 1
 #Sets the starting position for the character.
 charXpos = 50
-charYPos = 750
+charYPos = 0
 #Sets the starting position for the floor.
 floorXPos = 100
 floorYPos = 900
 #Used to check if the character has jumped and therefore if they are able to jump.
 jumped = False
 
-BLACK = (0,0,0)
 WHITE = (255,255,255)
-RED = (255,0,0)
-GREEN = (0,255,0)
+BLACK = (0,0,0)
+Purple = (146,32,164)
 BLUE = (0,0,255)
 
 window = pygame.display.set_mode((Width, Height),0, 32)
 font = pygame.font.SysFont(None,48)
 text = font.render("  ",True, WHITE,BLUE)
-text2 = font.render("                                                                                                                                                                                                                                                                    ",True,WHITE,RED)
-floor = text2.get_rect()
 character = text.get_rect()
 onFloor = False
+characterImage = pygame.image.load('guy.jpg')
+
+firstFloor = (0, 880, Width, 20)
+secondFloor = (0, 500, Width/2, 20)
+secondFloor2 = (700, 500,Width/2, 20)
+thirdFloor = (0, 300, Width/4, 20)
+thirdFloor2 =(400, 300, Width/4, 20)
+thirdFloor3 = (800, 400, Width/4, 20)
 
 while True:
     #Checks if the player is pressing any key. Listener.
@@ -40,7 +44,19 @@ while True:
 
 
     #Checks if the players position is less than the position of the floor. If it is then it brings the player back up one space.
-    onFloor = character.colliderect(floor)
+    onFloor = character.colliderect(firstFloor)
+    if character.colliderect(firstFloor) == True:
+        onFloor = True
+    elif character.colliderect(secondFloor) == True:
+        onFloor = True
+    elif character.colliderect(secondFloor2) == True:
+        onFloor = True
+    elif character.colliderect(thirdFloor) == True:
+        onFloor = True
+    elif character.colliderect(thirdFloor2) == True:
+        onFloor = True
+    elif character.colliderect(thirdFloor3) ==True:
+        onFloor = True
 
     if onFloor == True:
         charYDirection = 0
@@ -74,8 +90,6 @@ while True:
     charYPos = charYPos + charYDirection
     character.centerx = charXpos
     character.centery = charYPos
-    floor.centerx = floorXPos
-    floor.centery = floorYPos
 
     for event in pygame.event.get():
         if event.type == QUIT:
@@ -87,13 +101,19 @@ while True:
         sys.exit()
 
 
-
     pygame.draw.rect(window,WHITE,character)
-    pygame.draw.rect(window,WHITE,floor)
     window.fill(WHITE)
-    window.blit(text2,floor)
+
+
     window.blit(text,character)
+    window.blit(characterImage, (charXpos - 10, charYPos - 23))
+    pygame.draw.rect(window,Purple, firstFloor)
+    pygame.draw.rect(window, Purple, secondFloor)
+    pygame.draw.rect(window,Purple,secondFloor2)
+    pygame.draw.rect(window, Purple, thirdFloor)
+    pygame.draw.rect(window, Purple, thirdFloor2)
+    pygame.draw.rect(window, Purple, thirdFloor3)
+
     clock = pygame.time.Clock()
-    clock.tick(500)
-    pygame.display.flip()
+    clock.tick(300)
     pygame.display.update()
