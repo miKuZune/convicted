@@ -9,6 +9,13 @@ pygame.init()
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
+# Define button rects
+playbuttonrect = (560, 355, 190, 30)
+loadbuttonrect = (500, 410, 300, 30)
+optionsbuttonrect = (540, 470, 250, 30)
+extrasbuttonrect = (550, 520, 220, 40)
+exitbuttonrect = (580, 570, 190, 40)
+
 # Set up window
 WINDOW_WIDTH = 1300
 WINDOW_HEIGHT = 1000
@@ -25,21 +32,44 @@ extrasbutton = pygame.image.load('4 - Extras.png')
 exitbutton = pygame.image.load('5 - Exit.png')
 icon = pygame.image.load('8bitDude.jpg')
 
-# Blit menu to screen
+# Blit window
 window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 window.blit(background, (0, 0))
+
+# Draw button rects
+
 pygame.display.set_icon(icon)
+
+# Blit menu to screen
 pygame.display.set_caption('Main Menu')
 window.blit(playbutton, (560, 320))
 window.blit(loadbutton, (470, 380))
 window.blit(optionsbutton, (520, 430))
 window.blit(extrasbutton, (515, 480))
 window.blit(exitbutton, (570, 530))
-
 pygame.display.update()
 
 running = True
 while running:
+    pygame.draw.rect(window, BLACK, playbuttonrect)
+    pygame.draw.rect(window, BLACK, loadbuttonrect)
+    pygame.draw.rect(window, BLACK, optionsbuttonrect)
+    pygame.draw.rect(window, BLACK, extrasbuttonrect)
+    pygame.draw.rect(window, BLACK, exitbuttonrect)
+    click = pygame.mouse.get_pressed()
+    mousePos = pygame.mouse.get_pos()
+    if click[0] == True:
+        print "Waddup"
+
+
+    #if pygame.mouse.get_pressed(loadbuttonrect):
+
+    #if pygame.mouse.get_pressed(optionsbuttonrect):
+
+    #if pygame.mouse.get_pressed(extrasbuttonrect):
+
+    #if pygame.mouse.get_pressed(exitbuttonrect):
+
     event = pygame.event.poll()
     if event.type == pygame.QUIT:
         running = False
