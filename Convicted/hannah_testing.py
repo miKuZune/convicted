@@ -20,8 +20,9 @@ pygame.display.set_caption('Convicted')
 class player(object):
     def __init__(self):
         self.image = pygame.image.load('runningman.png')
+        self.image = pygame.transform.scale(self.image, (150, 150))
         self.x = 0
-        self.y = 570
+        self.y = 650
     # set up keyboard actions
     def handle_keys(self):
         key = pygame.key.get_pressed()
@@ -50,20 +51,32 @@ class player(object):
 # set up wall
 class brickwall(object):
     def __init__(self):
-        self.image = pygame.image.load('brickwall.png')
-        self.x = 600
-        self.y = 510
+        self.image = pygame.image.load('concretewall.png')
+        self.x = 450
+        self.y = 395
     # draw wall to surface
     def draw(self, surface):
             surface.blit(self.image, (self.x, self.y))
 
+# set up bin
+class bin(object):
+    def __init__(self):
+        self.image = pygame.image.load('bin_192px.png')
+        self.x = 250
+        self.y = 640
+    # draw bin to surface
+    def draw(self, surface):
+        surface.blit(self.image, (self.x, self.y))
+
 # set up playerpos and wallpos variables
 playerpos = player()
 wallpos = brickwall()
+binpos = bin()
 
 #run game loop
 running = True
 while running:
+    pressed = pygame.key.get_pressed()
     event = pygame.event.poll()
     if event.type == pygame.QUIT:
         running = False
@@ -73,6 +86,7 @@ while running:
     pygame.display.update()
     window.fill(white)
     wallpos.draw(window)
+    binpos.draw(window)
     clock.tick(40)
 
 pygame.quit()

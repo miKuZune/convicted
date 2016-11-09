@@ -32,8 +32,8 @@ character = text.get_rect()
 onFloor = False
 characterImage = pygame.image.load('guy.jpg')
 characterImage2 = pygame.image.load('8bitDude.jpg')
-skipImage = pygame.image.load('skipSmallSize.png')
-binImage = pygame.image.load('binSmallSize.jpg')
+skipImage = pygame.image.load('skip_200px.png')
+binImage = pygame.image.load('bin_192px.png')
 
 firstFloor = (0, 880, Width, 20)
 secondFloor = (0, 500, Width/2, 20)
