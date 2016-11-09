@@ -56,12 +56,20 @@ while running:
     pygame.draw.rect(window, BLACK, optionsbuttonrect)
     pygame.draw.rect(window, BLACK, extrasbuttonrect)
     pygame.draw.rect(window, BLACK, exitbuttonrect)
-    click = pygame.mouse.get_pressed()
     mousePos = pygame.mouse.get_pos()
+    click = pygame.mouse.get_pressed()
     if click[0] == True:
-        print "Waddup"
-
-
+        import main.py
+    if pygame.mouse.get_pos(loadbuttonrect):
+        print "Load"
+    if pygame.mouse.get_pos(optionsbuttonrect):
+        print "Options"
+    if pygame.mouse.get_pos(extrasbuttonrect):
+        print "Extras"
+    if pygame.mouse.get_pos(exitbuttonrect):
+        print "Exit"
+    else:
+        print "Error"
     #if pygame.mouse.get_pressed(loadbuttonrect):
 
     #if pygame.mouse.get_pressed(optionsbuttonrect):
