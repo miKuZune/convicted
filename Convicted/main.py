@@ -31,10 +31,14 @@ class player(object):
     def handle_keys(self):
         key = pygame.key.get_pressed()
         dist = 5
+        standing = True
+        jumping = False
         if key[pygame.K_LEFT]:
             self.x -= dist
         if key[pygame.K_RIGHT]:
             self.x += dist
+        if key[pygame.K_SPACE] and jumping == False:
+            self.y += - 20
         # keep player on screen
         if self.x < 0:
             self.x = 0
