@@ -1,10 +1,8 @@
 import pygame, sys
-import os
 from pygame.locals import *
 
 # Set up pygame
 pygame.init()
-clock = pygame.time.Clock()
 
 # Set up colours
 BLACK = (0, 0, 0)
@@ -14,113 +12,121 @@ GREY = (169, 169, 169)
 # Set up window
 WINDOW_WIDTH = 1200
 WINDOW_HEIGHT = 900
-window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), 0, 32)
 pygame.display.set_caption('Convicted')
 
-# Set up Road
+# Check if player has jumped
+jumped = False
+
+# Set up road
 road = (0, 880, WINDOW_WIDTH, 40)
 
-"""Set up player"""
-class player(object):
-    def __init__(self):
-        self.sprite = pygame.image.load('runningman.png').convert()
-        self.sprite = pygame.transform.scale(self.sprite, (150, 150))
-        self.rect = self.sprite.get_rect()
-        self.x = 0
-        self.y = 740
-    # set up keyboard actions
-    def handle_keys(self):
-        key = pygame.key.get_pressed()
-        dist = 5
-        standing = True
-        jumping = False
-        if key[pygame.K_LEFT]:
-            self.x -= dist
-        if key[pygame.K_RIGHT]:
-            self.x += dist
-        if key[pygame.K_SPACE] and jumping == False:
-            self.y += - 20
-        # keep player on screen
-        if self.x < 0:
-            self.x = 0
-        if self.x > 1050:
-            self.x = 1050
-        if self.y < 0:
-            self.y = 0
-        if self.y > 1050:
-            self.y = 1050
-    # draw player to surface
-    def draw(self, surface):
-        surface.blit(self.sprite, (self.x, self.y))
+# Set up player
+character = pygame.sprite.Sprite()
+character.image = pygame.image.load('runningman.png').convert_alpha()
+character.image = pygame.transform.scale(character.image, (150, 150))
+character.rect = character.image.get_rect()
+character.rect.x = 0
+character.rect.y = 740
 
-"""Set up wall"""
-class brickwall(object):
-    def __init__(self):
-        self.sprite = pygame.image.load('concretewall_smaller.png').convert()
-        self.sprite = pygame.transform.scale(self.sprite, (138, 273))
-        self.rect = self.sprite.get_rect()
-        self.x = 860
-        self.y = 610
-    # draw wall to surface
-    def draw(self, surface):
-            surface.blit(self.sprite, (self.x, self.y))
+# Set up wall
+wall = pygame.sprite.Sprite()
+wall.image = pygame.image.load('concretewall.png')
+wall.image = pygame.transform.scale(wall.image, (138, 273))
+wall.rect = wall.image.get_rect()
+wall.rect.x = 860
+wall.rect.y = 610
 
-"""Set up bin"""
-class bin(object):
-    def __init__(self):
-        self.image = pygame.image.load('bin_192px.png')
-        self.x = 250
-        self.y = 720
-    # draw bin to surface
-    def draw(self, surface):
-        surface.blit(self.image, (self.x, self.y))
+# Set up bin
+bin = pygame.sprite.Sprite()
+bin.image = pygame.image.load('bin_192px.png')
+bin.rect = bin.image.get_rect()
+bin.rect.x = 250
+bin.rect.y = 730
 
-"""Set up bikerack"""
-class bikerack(object):
-    def __init__(self):
-        self.image = pygame.image.load('BikeRack.png')
-        self.image = pygame.transform.scale(self.image, (400, 400))
-        self.x = 450
-        self.y = 610
-    # draw bikerack to surface
-    def draw(self, surface):
-        surface.blit(self.image, (self.x, self.y))
-
-BrickWallRect = (138, 273, 0, 0)
-pygame.draw.rect(window, BLACK, BrickWallRect)
-PlayerRect = (150, 150, 0, 0)
-Transparent = pygame.Surface((150, 150), pygame.SRCALPHA)
-Transparent.fill((255,255,255,128))
-pygame.draw.rect(window, BLACK, PlayerRect)
-window.blit(Transparent, (0,0))
-
-# set up playerpos and wallpos variables
-playerpos = player()
-wallpos = brickwall()
-binpos = bin()
-bikerackpos = bikerack()
+# Set up bike rack
+bikeRack = pygame.sprite.Sprite()
+bikeRack.image = pygame.image.load('BikeRack.png')
+bikeRack.image = pygame.transform.scale(bikeRack.image, (400, 400))
+bikeRack.rect = bikeRack.image.get_rect()
+bikeRack.rect.x = 450
+bikeRack.rect.y = 610
 
 #run game loop
-running = True
-while running:
+while True:
+
     pressed = pygame.key.get_pressed()
-    #if pygame.sprite.spritecollide(PlayerRect, BrickWallRect, True):
-       # playerpos.x = 500
-    event = pygame.event.poll()
-    if event.type == pygame.QUIT:
-        running = False
 
+    # keep player on screen
+    if character.rect.x < 0:
+        character.rect.x = 0
+    if character.rect.x > 1050:
+        character.rect.x = 1050
+    if character.rect.y < 0:
+        character.rect.y = 0
+    if character.rect.y > 1050:
+        character.rect.y = 1050
 
-    playerpos.handle_keys()
-    pygame.draw.rect(window, GREY, road)
-    playerpos.draw(window)
-    pygame.display.update()
+    # Set up keyboard controls for movement
+    dist = 5
+    if pressed[pygame.K_LEFT]:
+        character.rect.x -= dist
+    if pressed[pygame.K_RIGHT]:
+        character.rect.x += dist
+    if pressed[pygame.K_SPACE] and jumped == False:
+        character.rect.y += -50
+        jumped = True
+
+    onBin = character.rect.colliderect(bin.rect)
+    if character.rect.colliderect(bin.rect) == True:
+        onBin = True
+    else:
+        onBin = False
+
+    hitWall = character.rect.colliderect(wall.rect)
+    if character.rect.colliderect(wall.rect) == True:
+        hitWall = True
+    else:
+        hitWall = False
+
+    hitBike = character.rect.colliderect(bikeRack.rect)
+    if character.rect.colliderect(bikeRack.rect) == True:
+        hitBike = True
+    else:
+        hitBike = False
+
+    if onBin == True:
+        onBin = False
+        if character.rect.x >= bin.rect:
+            if pressed[K_RIGHT] or pressed[K_d]:
+                character.rect.x = 1
+            else:
+                character.rect.x = 1
+        elif character.rect.x <= bin.rect:
+            if pressed[K_LEFT] or pressed[K_a]:
+                character.rect.x = 1
+            else:
+                character.rect.x = 160
+        elif character.rect.y <= bin.rect:
+            character.rect.y = 0
+            if pressed[K_SPACE]:
+                character.rect.y = -4
+
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            pygame.quit()
+            sys.exit()
+
+    if pressed[K_ESCAPE]:
+        pygame.quit()
+        sys.exit()
+
     window.fill(WHITE)
-    wallpos.draw(window)
-    binpos.draw(window)
-    bikerackpos.draw(window)
-
+    pygame.draw.rect(window, GREY, road)
+    window.blit(character.image, character.rect)
+    window.blit(wall.image, wall.rect)
+    window.blit(bin.image, bin.rect)
+    window.blit(bikeRack.image, bikeRack.rect)
+    clock = pygame.time.Clock()
     clock.tick(60)
-
-pygame.quit()
-quit()
+    pygame.display.update()
